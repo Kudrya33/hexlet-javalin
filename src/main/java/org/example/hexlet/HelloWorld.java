@@ -9,7 +9,15 @@ public class HelloWorld {
             config.bundledPlugins.enableDevLogging();
         });
 
-        app.get("/", ctx -> ctx.result("Hello World"));
+        app.get("/hello", ctx -> {
+            String name = ctx.queryParam("name");
+            if (name == null || name.isEmpty()) {
+                ctx.result("Hello, World!");
+            } else {
+                ctx.result("Hello, " + name + "!");
+            }
+        });
+
         app.start(7070);
     }
 }
