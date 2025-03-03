@@ -17,6 +17,10 @@ public class HelloWorld {
             config.fileRenderer(new JavalinJte());
         });
 
+        app.get("/layout", ctx -> {
+            ctx.render("layout/page.jte");
+        });
+
         Course HTTP = new Course(1,"HTTP", "description");
         Course CSS = new Course(2,"CSS", "description");
         Course HTML = new Course(3,"HTML", "description");
