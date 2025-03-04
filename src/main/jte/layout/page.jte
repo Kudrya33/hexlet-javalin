@@ -19,13 +19,12 @@
     </header>
 
     <main>
-        <h2>Добро пожаловать на наш сайт!</h2>
-        <p>Здесь будет основное содержимое страницы.</p>
+        ${content}
     </main>
 
 
     <footer>
-        ${content}
+        <p>Посетите мой профиль на <a href="https://github.com/Kudrya33" target="_blank">GitHub</a>.</p>
     </footer>
 </body>
 </html>
