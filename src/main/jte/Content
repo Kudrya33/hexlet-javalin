@@ -1,8 +1,0 @@
-@import gg.jte.Content
-@param Content content
-
-@template.layout.page(
-    content = @`
-        <p>Посетите мой профиль на <a href="https://github.com/Kudrya33" target="_blank">GitHub</a>.</p>
-    `
-)
