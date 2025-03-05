@@ -4,6 +4,8 @@ import io.javalin.Javalin;
 import io.javalin.rendering.template.JavalinJte;
 import org.example.hexlet.dto.courses.CoursesPage;
 import org.example.hexlet.model.Course;
+import org.example.hexlet.model.User;
+import org.example.hexlet.repository.UserRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,8 +21,28 @@ public class HelloWorld {
             config.fileRenderer(new JavalinJte());
         });
 
+        app.get("/users/build", ctx -> {
+            ctx.render("users/build.jte");
+        });
+
+        app.post("/users", ctx -> {
+            var name = ctx.formParam("name").trim();
+            var email = ctx.formParam("email").trim().toLowerCase();
+            var password = ctx.formParam("password");
+            var passwordConfirmation = ctx.formParam("passwordConfirmation");
+
+            var user = new User(name, email, password);
+            UserRepository.save(user);
+            ctx.redirect("/users");
+        });
+
         app.get("/layout", ctx -> {
             ctx.render("layout/page.jte");
+        });
+
+        app.get("/users", ctx -> {
+           List<User> users = UserRepository.getEntities();
+           ctx.render("users/user.jte", model("users", users));
         });
 
         Course HTTP = new Course(1,"HTTP", "Все о запросах");
