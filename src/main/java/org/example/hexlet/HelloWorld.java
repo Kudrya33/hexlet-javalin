@@ -6,6 +6,8 @@ import org.example.hexlet.dto.courses.CoursesPage;
 import org.example.hexlet.model.Course;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static io.javalin.rendering.template.TemplateUtil.model;
 
@@ -21,9 +23,9 @@ public class HelloWorld {
             ctx.render("layout/page.jte");
         });
 
-        Course HTTP = new Course(1,"HTTP", "description");
-        Course CSS = new Course(2,"CSS", "description");
-        Course HTML = new Course(3,"HTML", "description");
+        Course HTTP = new Course(1,"HTTP", "Все о запросах");
+        Course CSS = new Course(2,"CSS", "Теперь ты художник");
+        Course HTML = new Course(3,"HTML", "Как же тебя разметить");
         var courses = new ArrayList<Course>();
         courses.add(HTTP);
         courses.add(CSS);
@@ -31,7 +33,20 @@ public class HelloWorld {
 
         app.get("/courses", ctx -> {
             var header = "Курсы по программированию";
-            var page = new CoursesPage(courses, header);
+            var term = ctx.queryParam("term");
+
+            List<Course> coursesSort;
+
+            if (term != null && !term.isEmpty()) {
+                coursesSort = courses.stream()
+                        .filter(course -> course.getName().toLowerCase().contains(term.toLowerCase()) ||
+                                course.getDescription().toLowerCase().contains(term.toLowerCase()))
+                        .collect(Collectors.toList());
+            } else {
+                coursesSort = courses;
+            }
+
+            var page = new CoursesPage(coursesSort, header, term);
             ctx.render("courses/index.jte", model("page", page));
         });
 
@@ -39,6 +54,7 @@ public class HelloWorld {
             var id = ctx.pathParamAsClass("id", Integer.class).getOrDefault(0);
             var header = "Курсы по программированию";
             ArrayList<Course> courseId = new ArrayList<>();
+            var term = ctx.queryParam("term");
 
             courses.forEach((course) -> {
                 if (id == course.getId()) {
@@ -46,7 +62,7 @@ public class HelloWorld {
                 }
             });
 
-            var page = new CoursesPage(courseId, header);
+            var page = new CoursesPage(courseId, header, term);
             ctx.render("courses/index.jte", model("page", page));
         });
 
