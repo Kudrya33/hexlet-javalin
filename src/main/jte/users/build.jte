@@ -23,13 +23,13 @@
       <div>
         <label>
           <p>Имя</p>
-          <input type="text" name="name" />
+          <input type="text" name="name" value="${page.getName()}"/>
         </label>
       </div>
       <div>
         <label>
           <p>Email</p>
-          <input type="email" required name="email" />
+          <input type="email" required name="email" value="${page.getEmail()}"/>
         </label>
       </div>
       <div>
