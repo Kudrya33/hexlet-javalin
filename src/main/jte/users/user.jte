@@ -1,3 +1,4 @@
+@import org.example.hexlet.NamedRoutes
 @param java.util.List<org.example.hexlet.model.User> users
 
 <!DOCTYPE html>
@@ -15,7 +16,7 @@
         @endfor
     </ul>
 
-    <a href="/users/build">Добавить нового пользователя</a>
+    <a href="${NamedRoutes.buildUserPath()}">Добавить нового пользователя</a>
 </body>
 </html>
 
