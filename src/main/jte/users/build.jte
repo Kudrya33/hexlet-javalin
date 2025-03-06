@@ -1,3 +1,16 @@
+@import org.example.hexlet.dto.users.BuildUserPage
+@param BuildUserPage page
+
+@if(page.getErrors() != null)
+      <ul>
+          @for(var validator : page.getErrors().values())
+              @for(var error : validator)
+                  <li>${error.getMessage()}</li>
+              @endfor
+          @endfor
+      </ul>
+@endif
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
