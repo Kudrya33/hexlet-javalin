@@ -3,6 +3,7 @@ package org.example.hexlet;
 import io.javalin.Javalin;
 import io.javalin.rendering.template.JavalinJte;
 import io.javalin.validation.ValidationException;
+import org.example.hexlet.controller.UsersController;
 import org.example.hexlet.dto.courses.CoursesPage;
 import org.example.hexlet.dto.users.BuildUserPage;
 import org.example.hexlet.model.Course;
@@ -28,10 +29,11 @@ public class HelloWorld {
             ctx.render("users/build.jte", model("page", page));
         });
 
-        app.post(NamedRoutes.usersPath(), ctx -> {
+        app.post("/users", UsersController::create);
+
+        /*app.post(NamedRoutes.usersPath(), ctx -> {
             var name = ctx.formParam("name").trim();
             var email = ctx.formParam("email").trim().toLowerCase();
-
             try {
                 var passwordConfirmation = ctx.formParam("passwordConfirmation");
                 var password = ctx.formParamAsClass("password", String.class)
@@ -45,7 +47,7 @@ public class HelloWorld {
                 var page = new BuildUserPage(name, email, e.getErrors());
                 ctx.render("users/build.jte", model("page", page));
             }
-        });
+        });*/
 
         app.get("/layout", ctx -> {
             ctx.render("layout/page.jte");
