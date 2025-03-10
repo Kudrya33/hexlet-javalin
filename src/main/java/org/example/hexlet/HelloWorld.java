@@ -11,6 +11,7 @@ import org.example.hexlet.model.User;
 import org.example.hexlet.repository.UserRepository;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,6 +23,18 @@ public class HelloWorld {
         var app = Javalin.create(config -> {
             config.bundledPlugins.enableDevLogging();
             config.fileRenderer(new JavalinJte());
+        });
+
+        app.before(ctx -> {
+            System.out.println("Date and time of receipt of the request: " + new Date());
+        });
+
+        app.get("/", ctx -> {
+            ctx.result("Hello from middleware!");
+        });
+
+        app.after(ctx -> {
+            System.out.println("Response has been sent");
         });
 
         app.get(NamedRoutes.buildUserPath(), ctx -> {
