@@ -4,6 +4,7 @@ import io.javalin.Javalin;
 import io.javalin.rendering.template.JavalinJte;
 import io.javalin.validation.ValidationException;
 import org.example.hexlet.controller.UsersController;
+import org.example.hexlet.dto.MainPage;
 import org.example.hexlet.dto.courses.CoursesPage;
 import org.example.hexlet.dto.users.BuildUserPage;
 import org.example.hexlet.model.Course;
@@ -25,13 +26,20 @@ public class HelloWorld {
             config.fileRenderer(new JavalinJte());
         });
 
+        app.get("/", ctx -> {
+            var visited = Boolean.valueOf(ctx.cookie("visited"));
+            var page = new MainPage(visited);
+            ctx.render("layout/mainPage.jte", model("page", page));
+            ctx.cookie("visited", String.valueOf(true));
+        });
+
         app.before(ctx -> {
             System.out.println("Date and time of receipt of the request: " + new Date());
         });
 
-        app.get("/", ctx -> {
+        /*app.get("/", ctx -> {
             ctx.result("Hello from middleware!");
-        });
+        });*/
 
         app.after(ctx -> {
             System.out.println("Response has been sent");
