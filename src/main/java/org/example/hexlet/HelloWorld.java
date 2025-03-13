@@ -86,8 +86,11 @@ public class HelloWorld {
         });
 
         app.get("/users", ctx -> {
-           List<User> users = UserRepository.getEntities();
-           ctx.render("users/user.jte", model("users", users));
+
+            String flash = ctx.consumeSessionAttribute("flash");
+
+            List<User> users = UserRepository.getEntities();
+            ctx.render("users/user.jte", model("users", users, "flash", flash));
         });
 
         Course HTTP = new Course(1,"HTTP", "Все о запросах");

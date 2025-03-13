@@ -18,6 +18,8 @@ public class UsersController {
         var email = ctx.formParam("email");
         var password = ctx.formParam("password");
 
+        ctx.sessionAttribute("flash", "User has been created!");
+
         var user = new User(name, email, password);
         UserRepository.save(user);
         ctx.redirect(NamedRoutes.usersPath());
