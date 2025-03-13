@@ -3,6 +3,7 @@ package org.example.hexlet;
 import io.javalin.Javalin;
 import io.javalin.rendering.template.JavalinJte;
 import io.javalin.validation.ValidationException;
+import org.example.hexlet.controller.SessionsController;
 import org.example.hexlet.controller.UsersController;
 import org.example.hexlet.dto.MainPage;
 import org.example.hexlet.dto.courses.CoursesPage;
@@ -26,12 +27,22 @@ public class HelloWorld {
             config.fileRenderer(new JavalinJte());
         });
 
+        app.get("/sessions/build", SessionsController::build);
+        app.post("/sessions", SessionsController::create);
+        app.delete("/sessions", SessionsController::destroy);
+
+
         app.get("/", ctx -> {
+            var page = new MainPage(ctx.sessionAttribute("currentUser"));
+            ctx.render("index.jte", model("page", page));
+        });
+
+        /*app.get("/", ctx -> {
             var visited = Boolean.valueOf(ctx.cookie("visited"));
             var page = new MainPage(visited);
             ctx.render("layout/mainPage.jte", model("page", page));
             ctx.cookie("visited", String.valueOf(true));
-        });
+        });*/
 
         app.before(ctx -> {
             System.out.println("Date and time of receipt of the request: " + new Date());
