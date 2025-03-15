@@ -25,5 +25,9 @@ public class NamedRoutes {
     public static String sessionsPath() {
         return "/sessions";
     }
+
+    public static String carsPath() {
+        return "/cars";
+    }
 }
 

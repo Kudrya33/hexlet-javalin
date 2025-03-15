@@ -3,6 +3,7 @@ package org.example.hexlet;
 import io.javalin.Javalin;
 import io.javalin.rendering.template.JavalinJte;
 import io.javalin.validation.ValidationException;
+import org.example.hexlet.controller.CarController;
 import org.example.hexlet.controller.SessionsController;
 import org.example.hexlet.controller.UsersController;
 import org.example.hexlet.dto.MainPage;
@@ -10,22 +11,48 @@ import org.example.hexlet.dto.courses.CoursesPage;
 import org.example.hexlet.dto.users.BuildUserPage;
 import org.example.hexlet.model.Course;
 import org.example.hexlet.model.User;
+import org.example.hexlet.repository.BaseRepository;
 import org.example.hexlet.repository.UserRepository;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
+
 import static io.javalin.rendering.template.TemplateUtil.model;
 
 public class HelloWorld {
-    public static void main(String[] args) {
+        public static void main(String[] args) throws Exception {
 
-        var app = Javalin.create(config -> {
+            var hikariConfig = new HikariConfig();
+            hikariConfig.setJdbcUrl("jdbc:h2:mem:project;DB_CLOSE_DELAY=-1;");
+
+            var dataSource = new HikariDataSource(hikariConfig);
+
+            var url = HelloWorld.class.getClassLoader().getResourceAsStream("schema.sql");
+            var sql = new BufferedReader(new InputStreamReader(url))
+                    .lines().collect(Collectors.joining("\n"));
+
+            try (var connection = dataSource.getConnection();
+                 var statement = connection.createStatement()) {
+                statement.execute(sql);
+            }
+            BaseRepository.dataSource = dataSource;
+
+            var app = Javalin.create(config -> {
+                config.bundledPlugins.enableDevLogging();
+            });
+
+
+        /*var app = Javalin.create(config -> {
             config.bundledPlugins.enableDevLogging();
             config.fileRenderer(new JavalinJte());
-        });
+        });*/
 
         app.get("/sessions/build", SessionsController::build);
         app.post("/sessions", SessionsController::create);
